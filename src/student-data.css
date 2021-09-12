@@ -1,0 +1,19 @@
+.student-card {
+  display: flex;
+  flex-direction: row;
+}
+.glyph {
+  border: 0.3px solid gray;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.student-container {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  width: 700px;
+  margin: 20px 50px;
+  border: 1px solid gray;
+  border-radius: 1%;
+}
