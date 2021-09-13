@@ -1,51 +1,54 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { StudentData } from './student-data';
+import { InforCards } from './info-cards';
+
 import './student-data.css';
 
 export const Homepage = () => {
-  const [studentsArray, setStudentsArray] = useState([]);
   const [windowHeight, setWindowHeight] = useState();
+  const handleResize = () => setWindowHeight(window.innerHeight - 200);
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const [query, setQuery] = useState('');
-  const getData = async () => {
+  const [studentsArray, setStudentsArray] = useState([]);
+
+  const fetchData = async () => {
     const data = await axios.get(
       'https://api.hatchways.io/assessment/students'
     );
     setStudentsArray(data.data.students);
+    console.log(studentsArray);
   };
-
-  const handleResize = () => setWindowHeight(window.innerHeight - 100);
 
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    getData();
+    fetchData();
   }, []);
 
-  let mockData = [];
-  const checkWithResponse = (value) => {
-    for (let i = 0; i < studentsArray.length; i++) {
-      for (let prop in studentsArray[i]) {
-        if (prop === 'firstName') {
-          if (studentsArray[i][prop].startsWith(value.toUpperCase())) {
-            mockData.push(studentsArray[i]);
-          }
-        }
-      }
-    }
-    setStudentsArray(mockData);
+  const handleChange = (e) => {
+    setQuery(e.target.value.toLowerCase());
   };
 
-  const handleChange = (e) => {
-    setQuery(e.target.value);
-    query.length > 0 && checkWithResponse(query);
+  const queryData = () => {
+    const filteredData = studentsArray.filter((student) => {
+      return student.firstName.toLowerCase().startsWith(query);
+    });
+    if (filteredData.length > 0) return filteredData;
+    // matched students
+    else if (query.length === 0) return studentsArray;
+    //all students
+    else return [];
   };
 
   return (
     <div className="student-container" style={{ height: windowHeight }}>
       <input onChange={handleChange} />
-      {studentsArray.map((student) => {
-        return <StudentData studentInfo={student} key={student?.id} />;
-      })}
+      <InforCards information={queryData()} />
     </div>
   );
 };

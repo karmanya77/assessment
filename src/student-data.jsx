@@ -2,9 +2,8 @@ import React from 'react';
 import { sum } from 'lodash';
 import './student-data.css';
 
-export const StudentData = (studentInfo) => {
-  const { firstName, email, skill, grades, company, pic } =
-    studentInfo?.studentInfo;
+export const StudentData = ({ studentInfo }) => {
+  const { firstName, email, skill, grades, company, pic } = studentInfo;
 
   let total = [];
 
