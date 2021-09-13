@@ -23,7 +23,6 @@ export const Homepage = () => {
       'https://api.hatchways.io/assessment/students'
     );
     setStudentsArray(data.data.students);
-    console.log(studentsArray);
   };
 
   useEffect(() => {
@@ -42,7 +41,7 @@ export const Homepage = () => {
     // matched students
     else if (query.length === 0) return studentsArray;
     //all students
-    else return [];
+    else return;
   };
 
   return (
